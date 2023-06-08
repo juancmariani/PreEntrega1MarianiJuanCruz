@@ -16,15 +16,7 @@ function calcularPlazo (montAct, values) {
         alert("Si retiras los dividendos mes a mes, no te conviene hacer el plazo fijo. Compra dólares para no perder un valor de $" + Math.abs((difValor2)));
     }
 }
-
-/* function valorAbsoluto (valor) {
-    if (valor >= 0) {
-        return valor; 
-    } else { 
-        return valor * -1;
-    }
-} */
-
+    
 function outputMessage(arr) {
     let informacionMes = "";
     arr.forEach(valueMonth => informacionMes += "Mes " + valueMonth.mes + ": Monto acumulado de $" + valueMonth.montoActual + "\n");
@@ -38,18 +30,14 @@ let inputValues = {
 };
 
 
-//let tasaAnual = parseFloat(prompt("Ingrese la tasa anual para la constitución de un plazo fijo: \n\nTip: Algunos bancos la tienen en 91%, otros en 97%"));
 if (inputValues.tasaAnual > 3) {
     inputValues.tasaAnual = inputValues.tasaAnual / 100;
 }
 
-//let inflacionInteranual = parseFloat(prompt("Ingrese la inflación interanual: \n\nTip: La del mes de abril fue del 108,8%"));
 if (inputValues.inflacionInteranual > 20) {
     inputValues.inflacionInteranual = inputValues.inflacionInteranual / 100;
 }
 
-//Decidí poner valores ajustables y no fijos para que el cálculo pueda ser atemporal.
-//let inversion = parseFloat(prompt("Cuánto dinero estás dispuesto a invertir?"));
 let tasaMensual = inputValues.tasaAnual / 12;
 let beneficioMensual = 0;
 let montoActual = inputValues.inversion;
@@ -64,6 +52,4 @@ for (let mes = 1; mes <=12; mes++) {
 let infoMes = outputMessage(arrInfoMes);
 
 alert("Si reinvertís los dividendos del plazo fijo mes a mes, estos serían los valores que recuperarías cada mes: \n\n" + infoMes);
-// alert("Mes " + mes + ": Monto acumulado de $" + montoActual.toFixed(2) + "\n") => En caso de querer que se produzca un alert por cada mes
 calcularPlazo(montoActual, inputValues);
-
