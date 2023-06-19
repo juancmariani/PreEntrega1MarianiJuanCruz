@@ -5,9 +5,30 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PreEntrega2Mariani</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
 </head>
 <body>
+    <div class="text-center" >
+        <h1>¡Bienvenidos a Desinfla2!</h1>
+        <h3>El lugar donde vas a poder combatir a la inflación</h3>
+        <h6>(O al menos intentarlo)</h6>
+        <br>
+    </div>
+    <div class="container text-center">
+        <form id="form">
+                <label for="tasaAnual" class="form-label">¿Cuál es la tasa anual de tu banco?</label>
+                <input type="text" class="form-control" id="tasaAnual" placeholder="Tip: Algunos bancos la tienen en 91%, otros en 97%">
+                <br>
+                <label for="inflacion" class="form-label">¿Cuál es la inflación interanual?</label>
+                <input type="text" class="form-control" id="inflacion" placeholder="La del mes de mayo fue de 108,8%">
+                <br>
+                <label for="inversion" class="form-label">¿Cuánto dinero estás dispuesto a invertir?</label>
+                <input type="text" class="form-control" id="inversion" placeholder="Bajo tu propio riesgo...">
+                <br>
+            <button type="submit" class="btn btn-primary">Simular plazo fijo</button>
+        </form>
+    </div>
     <script src="main.js"></script>
-    
+    <script src="2.js"></script>
 </body>
 </html>
