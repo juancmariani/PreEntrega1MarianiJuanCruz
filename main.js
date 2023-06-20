@@ -4,23 +4,27 @@ function calcularPlazo (montAct, values) {
     let difValor = montAct - valorInflacionado;
     let difValor2 = resultadoAnual - valorInflacionado;
     if (montAct > valorInflacionado) {
-        document.getElementById("result").innerHTML = ("A esta inflación y con esta tasa, te conviene realizar un plazo fijo y reinvertir los dividendos en el mismo. \n Por un beneficio de: $" 
-            + (montAct - values.inversion).toFixed(2) + "\nLe estás ganando $" + difValor.toFixed(2) + " a la Inflación.\n\nEso sí, bajo tu propio riesgo que esto es Argentina...");
+        document.getElementById("result").innerHTML = ("A esta inflación y con esta tasa, te conviene realizar un plazo fijo y reinvertir los dividendos en el mismo. <br> Obtendrás un beneficio de: $" 
+            + (montAct - values.inversion).toFixed(2) + "<br>Le estás ganando $" + difValor.toFixed(2) + " a la Inflación. Eso sí, bajo tu propio riesgo que esto es Argentina...");
+        document.getElementById("result").className = "text-success text-center";
     }   else {
-        document.getElementById("result").innerHTML = ("Ni te gastes en hacer el plazo fijo, compra dólares. Estarías perdiendo un valor de $" + Math.abs((difValor)));
+        document.getElementById("result").innerHTML = ("Ni te gastes en hacer el plazo fijo, compra dólares. <br> Estarías perdiendo un valor de $" + Math.abs((difValor)));
+        document.getElementById("result2").className = "text-danger text-center";
     }
 
     if (resultadoAnual > valorInflacionado) {
-        document.getElementById("result2").innerHTML = ("También te conviene realizar el plazo fijo aunque retires los dividendos. Le estarías ganando $" + difValor2 + " a la inflación.");
+        document.getElementById("result2").innerHTML = ("<br>También te conviene realizar el plazo fijo aunque retires los dividendos. Le estarías ganando $" + difValor2 + " a la inflación.");
+        document.getElementById("result2").className = "text-success text-center";
     } else {
-        document.getElementById("result2").innerHTML = ("Si retiras los dividendos mes a mes, no te conviene hacer el plazo fijo. Compra dólares para no perder un valor de $" + Math.abs((difValor2)));
+        document.getElementById("result2").innerHTML = ("<br>Si retiras los dividendos mes a mes, no te conviene hacer el plazo fijo. Compra dólares para no perder un valor de $" + Math.abs((difValor2)));
+        document.getElementById("result2").className = "text-danger text-center";
     }
     localStorage.clear()
 }
 
 function outputMessage(arr) {
     let informacionMes = "";
-    arr.forEach(valueMonth => informacionMes += "Mes " + valueMonth.mes + ": Monto acumulado de $" + valueMonth.montoActual + "\n");
+    arr.forEach(valueMonth => informacionMes += "Mes " + valueMonth.mes + ": Monto acumulado de $" + valueMonth.montoActual + "<br>");
     return informacionMes;
 }
 
@@ -31,6 +35,22 @@ document.getElementById("form").addEventListener("submit", function(event) {
     localStorage.setItem("inversion", document.getElementById("inversion").value);
     location.reload();
 })
+
+function validarInputs() {
+    let valor1 = inputValues.tasaAnual;
+    let valor2 = inputValues.inflacion;
+    let valor3 = inputValues.inversion;
+
+    if (isNaN(valor1) || valor1 == "" ||
+    isNaN(valor2) || valor2 == "" ||
+    isNaN(valor3) || valor3 == "") {
+        document.getElementById("result").innerHTML = "Alguno de los campos ingresados no es válido.";
+        document.getElementById("result").className = "text-danger text-center";
+        document.getElementById("result2").innerHTML = "";
+        document.getElementById("result3").innerHTML = "";
+        document.getElementById("pResult").innerHTML = "";
+    }
+}
 
 let inputValues = {
 tasaAnual: parseFloat(localStorage.getItem("tasaAnual")),
@@ -58,10 +78,7 @@ for (let mes = 1; mes <=12; mes++) {
 
 let infoMes = outputMessage(arrInfoMes);
 
-console.log("Si reinvertís los dividendos del plazo fijo mes a mes, estos serían los valores que recuperarías cada mes: \n\n" + infoMes);
-calcularPlazo(montoActual, inputValues); 
-
-function clear() {
-    localStorage.clear()
-}
-clear()
+calcularPlazo(montoActual, inputValues);
+document.getElementById("result3").innerHTML = infoMes
+validarInputs();
+localStorage.clear()
