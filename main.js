@@ -12,15 +12,15 @@ function calcularPlazo(montAct, values) {
             + (montAct - values.inversion).toFixed(2) + "<br>Le estás ganando $" + difValor.toFixed(2) + " a la Inflación. Eso sí, bajo tu propio riesgo que esto es Argentina...");
         document.getElementById("result").className = "text-success text-center";
     }   else {
-        document.getElementById("result").innerHTML = ("Ni te gastes en hacer el plazo fijo, compra dólares. <br> Estarías perdiendo un valor de $" + Math.abs((difValor)));
+        document.getElementById("result").innerHTML = ("Ni te gastes en hacer el plazo fijo, compra dólares. <br> Estarías perdiendo un valor de $" + Math.abs((difValor)).toFixed(2));
         document.getElementById("result2").className = "text-danger text-center";
     }
 
     if (resultadoAnual > valorInflacionado) {
-        document.getElementById("result2").innerHTML = ("<br>También te conviene realizar el plazo fijo aunque retires los dividendos. Le estarías ganando $" + difValor2 + " a la inflación.");
+        document.getElementById("result2").innerHTML = ("<br>También te conviene realizar el plazo fijo aunque retires los dividendos. Le estarías ganando $" + difValor2.toFixed(2) + " a la inflación.");
         document.getElementById("result2").className = "text-success text-center";
     } else {
-        document.getElementById("result2").innerHTML = ("<br>Si retiras los dividendos mes a mes, no te conviene hacer el plazo fijo. Compra dólares para no perder un valor de $" + Math.abs((difValor2)));
+        document.getElementById("result2").innerHTML = ("<br>Si retiras los dividendos mes a mes, no te conviene hacer el plazo fijo. Compra dólares para no perder un valor de $" + Math.abs((difValor2)).toFixed(2));
         document.getElementById("result2").className = "text-danger text-center";
     }
     /* localStorage.clear() */
