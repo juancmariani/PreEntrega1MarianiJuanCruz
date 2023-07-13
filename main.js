@@ -23,7 +23,6 @@ function calcularPlazo(montAct, values) {
         document.getElementById("result2").innerHTML = ("<br>Si retiras los dividendos mes a mes, no te conviene hacer el plazo fijo. Compra dólares para no perder un valor de $" + Math.abs((difValor2)).toFixed(2));
         document.getElementById("result2").className = "text-danger text-center";
     }
-    /* localStorage.clear() */
 }
 
 function outputMessage(arr) {
@@ -66,6 +65,8 @@ function calcularMontoActual(inputValues) {
     return montoActual;
 }
 
+let inputValues = {items: []};
+
 document.getElementById("form").addEventListener("submit", function(event) {
     event.preventDefault();
     let tasaAnual = document.getElementById("tasaAnual").value;
@@ -73,14 +74,16 @@ document.getElementById("form").addEventListener("submit", function(event) {
     let inversion = document.getElementById("inversion").value;
 
     if (validarInputs(tasaAnual, inflacion, inversion)) {
-        let inputValues = {
-            tasaAnual: parseFloat(tasaAnual),
-            inflacion: parseFloat(inflacion),
-            inversion: parseFloat(inversion)
-            }
-
-        localStorage.setItem("inputValues", inputValues);
+        localStorage.getItem("inputValues", (inputValues))
+        inputValues.items += JSON.stringify({
+            tasaAnual:parseFloat(tasaAnual),
+            inflacion:parseFloat(inflacion),
+            inversion:parseFloat(inversion)
+        })     
+        localStorage.setItem("inputValues", JSON.stringify(inputValues));
         calcularPlazo(calcularMontoActual(inputValues), inputValues);
+        /* let tbody = document.createElement("tr")
+        tbody.innerHTML = inputValues.items */
     }
     
     
