@@ -61,11 +61,46 @@ function calcularMontoActual(inputValues) {
     document.getElementById("pResult").innerHTML = "Acumulación de monto mes a mes:"
     document.getElementById("result3").innerHTML = infoMes;
 
-
     return montoActual;
 }
 
+function getHistorial() {
+    document.getElementById("historicalBody").innerHTML = ""
+    let tbody = document.getElementById("historicalBody");
+    let savedValues = JSON.parse(localStorage.getItem("inputValues"));
+    let i = 0;
+    savedValues.items.forEach(item => {
+        item = JSON.parse(item);
+        let row = document.createElement("tr");
+        let tdNumber = document.createElement("td");
+        let tdTasaAnual = document.createElement("td");
+        let tdInflacion = document.createElement("td");
+        let tdInversion = document.createElement("td");
+        let tdResultado = document.createElement("td"); //
+        let tdResultado2 = document.createElement("td");
+        tdNumber.innerHTML = i+1;
+        tdTasaAnual.innerHTML = item.tasaAnual;
+        tdInflacion.innerHTML = item.inflacion;
+        tdInversion.innerHTML = item.inversion;
+        //Resultados dan mal
+        calcularPlazo(calcularMontoActual(values), values);
+
+        tdResultado.innerHTML = item.inversion - (item.inversion + (item.inversion * item.inflacion / 100));
+        tdResultado2.innerHTML = (item.inversion + (item.inversion * item.tasaAnual / 100)) - (item.inversion + (item.inversion * item.inflacion / 100));
+        
+        row.append(tdNumber);
+        row.append(tdTasaAnual);
+        row.append(tdInflacion);
+        row.append(tdInversion);
+        row.append(tdResultado);
+        row.append(tdResultado2);
+        tbody.append(row);
+        i++;
+    });
+}
+
 let inputValues = {items: []};
+localStorage.setItem("inputValues", JSON.stringify(inputValues));
 
 document.getElementById("form").addEventListener("submit", function(event) {
     event.preventDefault();
@@ -74,26 +109,14 @@ document.getElementById("form").addEventListener("submit", function(event) {
     let inversion = document.getElementById("inversion").value;
 
     if (validarInputs(tasaAnual, inflacion, inversion)) {
-        localStorage.getItem("inputValues", (inputValues))
-        inputValues.items += JSON.stringify({
+        let values = {
             tasaAnual:parseFloat(tasaAnual),
             inflacion:parseFloat(inflacion),
             inversion:parseFloat(inversion)
-        })     
+        }
+        let inputValues = JSON.parse(localStorage.getItem("inputValues"));     
+        inputValues.items.push(JSON.stringify(values));
         localStorage.setItem("inputValues", JSON.stringify(inputValues));
-        calcularPlazo(calcularMontoActual(inputValues), inputValues);
-        /* let tbody = document.createElement("tr")
-        tbody.innerHTML = inputValues.items */
+        calcularPlazo(calcularMontoActual(values), values);
     }
-    
-    
 })
-
-// Queda listo para utilizarse en entrega futuro (idea de historial de consultas)
-/* let inputValues = {
-tasaAnual: parseFloat(localStorage.getItem("tasaAnual")),
-inflacion: parseFloat(localStorage.getItem("inflacion")),
-inversion: parseFloat(localStorage.getItem("inversion"))
-} */ 
-
-/* localStorage.clear() */
