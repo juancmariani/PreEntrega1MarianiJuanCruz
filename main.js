@@ -1,4 +1,6 @@
-function calcularPlazo(montAct, values) {
+function calcularPlazo(values) {
+    let montAct = calcularMontoActual(values)
+
     if (values.inflacion > 20) {
         values.inflacion = values.inflacion / 100;
     }
@@ -78,8 +80,10 @@ function calcularMontoActual(inputValues) {
     return montoActual;
 }
 
-function simularValoresBtn() {
-    console.log("Hola");
+function simularValoresBtn(tasaAnual, inflacion, inversion) {
+    document.getElementById("result").innerHTML = '';
+    let historicalValues = {"tasaAnual":tasaAnual, "inflacion":inflacion, "inversion":inversion};
+    calcularPlazo(historicalValues)
 }
 
 function getHistorial() {
@@ -102,7 +106,7 @@ function getHistorial() {
         let tdInversion = document.createElement("td");
         let simularBtn = document.createElement("button");
         simularBtn.className = "btn btn-warning";
-        simularBtn.addEventListener('click', simularValoresBtn());
+        simularBtn.setAttribute("onclick","simularValoresBtn("+ item.tasaAnual + ", " + item.inflacion + ", " + item.inversion + ");");
         tdNumber.innerHTML = i+1;
         tdTasaAnual.innerHTML = item.tasaAnual;
         tdInflacion.innerHTML = item.inflacion;
@@ -139,7 +143,7 @@ simularPlazoFijoButton.addEventListener("click", function(event) {
         let inputValues = JSON.parse(localStorage.getItem("inputValues"));     
         inputValues.items.push(JSON.stringify(values));
         localStorage.setItem("inputValues", JSON.stringify(inputValues));
-        calcularPlazo(calcularMontoActual(values), values);
+        calcularPlazo(values);
     }
 })
 
