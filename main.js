@@ -4,25 +4,38 @@ function calcularPlazo(montAct, values) {
     }
 
     let valorInflacionado = values.inversion + values.inversion * values.inflacion;
+
     let resultadoAnual = values.inversion + values.tasaAnual * values.inversion;
     let difValor = montAct - valorInflacionado;
     let difValor2 = resultadoAnual - valorInflacionado;
+
+    let resultDiv = document.getElementById("result");
+
+    let results = [{}];
+    localStorage.setItem("results", results);
+    results.push(JSON.stringify(valorInflacionado));
+    let p1 = document.createElement("p");
     if (montAct > valorInflacionado) {
-        document.getElementById("result").innerHTML = ("A esta inflación y con esta tasa, te conviene realizar un plazo fijo y reinvertir los dividendos en el mismo. <br> Obtendrás un beneficio de: $" 
-            + (montAct - values.inversion).toFixed(2) + "<br>Le estás ganando $" + difValor.toFixed(2) + " a la Inflación. Eso sí, bajo tu propio riesgo que esto es Argentina...");
-        document.getElementById("result").className = "text-success text-center";
+        p1.innerHTML = "A esta inflación y con esta tasa, te conviene realizar un plazo fijo y reinvertir los dividendos en el mismo. <br> Obtendrás un beneficio de: $" 
+            + (montAct - values.inversion).toFixed(2) + "<br>Le estás ganando $" + difValor.toFixed(2) + " a la Inflación. Eso sí, bajo tu propio riesgo que esto es Argentina..."
+        p1.className = "text-success text-center";
     }   else {
-        document.getElementById("result").innerHTML = ("Ni te gastes en hacer el plazo fijo, compra dólares. <br> Estarías perdiendo un valor de $" + Math.abs((difValor)).toFixed(2));
-        document.getElementById("result2").className = "text-danger text-center";
+        p1.innerHTML = "Ni te gastes en hacer el plazo fijo, compra dólares. <br> Estarías perdiendo un valor de $" + Math.abs((difValor)).toFixed(2);
+        p1.className = "text-danger text-center";
     }
 
+    resultDiv.append(p1);
+
+    let p2 = document.createElement("p");
+
     if (resultadoAnual > valorInflacionado) {
-        document.getElementById("result2").innerHTML = ("<br>También te conviene realizar el plazo fijo aunque retires los dividendos. Le estarías ganando $" + difValor2.toFixed(2) + " a la inflación.");
-        document.getElementById("result2").className = "text-success text-center";
+        p2.innerHTML = "<br>También te conviene realizar el plazo fijo aunque retires los dividendos. Le estarías ganando $" + difValor2.toFixed(2) + " a la inflación.";
+        p2.className = "text-success text-center";
     } else {
-        document.getElementById("result2").innerHTML = ("<br>Si retiras los dividendos mes a mes, no te conviene hacer el plazo fijo. Compra dólares para no perder un valor de $" + Math.abs((difValor2)).toFixed(2));
-        document.getElementById("result2").className = "text-danger text-center";
+        p2.innerHTML = "<br>Si retiras los dividendos mes a mes, no te conviene hacer el plazo fijo. Compra dólares para no perder un valor de $" + Math.abs((difValor2)).toFixed(2);
+        p2.className = "text-danger text-center";
     }
+    resultDiv.append(p2);
 }
 
 function outputMessage(arr) {
@@ -35,9 +48,6 @@ function validarInputs(valor1, valor2, valor3) {
     if (isNaN(valor1) || isNaN(valor2) || isNaN(valor3) || valor1 == "" || valor2 == "" || valor3 == "") {
         document.getElementById("result").innerHTML = "Alguno de los campos ingresados no es válido.";
         document.getElementById("result").className = "text-danger text-center";
-        document.getElementById("result2").innerHTML = "";
-        document.getElementById("result3").innerHTML = "";
-        document.getElementById("pResult").innerHTML = "";
         return false;
     }
     return true;
@@ -56,19 +66,33 @@ function calcularMontoActual(inputValues) {
         montoActual += montoActual * tasaMensual;
         arrInfoMes.push({mes: mes, montoActual: (montoActual.toFixed(2))});
     }
+    
+    let resultDiv = document.getElementById("result");
+    let p = document.createElement("p");
 
-    let infoMes = outputMessage(arrInfoMes);
-    document.getElementById("pResult").innerHTML = "Acumulación de monto mes a mes:"
-    document.getElementById("result3").innerHTML = infoMes;
+    let infoMes = "Acumulación de monto mes a mes: <br>";
+    infoMes += outputMessage(arrInfoMes);
+    p.innerHTML = infoMes;
+    resultDiv.append(p);
 
     return montoActual;
 }
 
+function simularValoresBtn() {
+    console.log("Hola");
+}
+
 function getHistorial() {
+    if (JSON.parse(localStorage.getItem("inputValues")).items.length != 0) {
+        let x = document.getElementById("historicalTable");
+        x.style.display = "block";
+        }
     document.getElementById("historicalBody").innerHTML = ""
     let tbody = document.getElementById("historicalBody");
     let savedValues = JSON.parse(localStorage.getItem("inputValues"));
+    document.getElementById("historial").innerHTML = "Actualizar historial";
     let i = 0;
+    
     savedValues.items.forEach(item => {
         item = JSON.parse(item);
         let row = document.createElement("tr");
@@ -76,24 +100,19 @@ function getHistorial() {
         let tdTasaAnual = document.createElement("td");
         let tdInflacion = document.createElement("td");
         let tdInversion = document.createElement("td");
-        let tdResultado = document.createElement("td"); //
-        let tdResultado2 = document.createElement("td");
+        let simularBtn = document.createElement("button");
+        simularBtn.className = "btn btn-warning";
+        simularBtn.addEventListener('click', simularValoresBtn());
         tdNumber.innerHTML = i+1;
         tdTasaAnual.innerHTML = item.tasaAnual;
         tdInflacion.innerHTML = item.inflacion;
         tdInversion.innerHTML = item.inversion;
-        //Resultados dan mal
-        calcularPlazo(calcularMontoActual(values), values);
-
-        tdResultado.innerHTML = item.inversion - (item.inversion + (item.inversion * item.inflacion / 100));
-        tdResultado2.innerHTML = (item.inversion + (item.inversion * item.tasaAnual / 100)) - (item.inversion + (item.inversion * item.inflacion / 100));
-        
+        simularBtn.innerHTML = "Simular";
         row.append(tdNumber);
         row.append(tdTasaAnual);
         row.append(tdInflacion);
         row.append(tdInversion);
-        row.append(tdResultado);
-        row.append(tdResultado2);
+        row.append(simularBtn);
         tbody.append(row);
         i++;
     });
@@ -102,11 +121,14 @@ function getHistorial() {
 let inputValues = {items: []};
 localStorage.setItem("inputValues", JSON.stringify(inputValues));
 
-document.getElementById("form").addEventListener("submit", function(event) {
+const simularPlazoFijoButton = document.getElementById("simularPlazoFijoButton");
+
+simularPlazoFijoButton.addEventListener("click", function(event) {
     event.preventDefault();
     let tasaAnual = document.getElementById("tasaAnual").value;
     let inflacion = document.getElementById("inflacion").value;
     let inversion = document.getElementById("inversion").value;
+    document.getElementById("result").innerHTML = '';
 
     if (validarInputs(tasaAnual, inflacion, inversion)) {
         let values = {
@@ -120,3 +142,33 @@ document.getElementById("form").addEventListener("submit", function(event) {
         calcularPlazo(calcularMontoActual(values), values);
     }
 })
+
+fetch("https://api.bluelytics.com.ar/v2/latest")
+.then(respuesta => respuesta.json())
+.then(datos => {
+    const dolarValues = {
+        ventaOficial:datos.oficial.value_sell,
+        compraOficial:datos.oficial.value_buy,
+        ventaBlue:datos.blue.value_sell,
+        compraBlue:datos.blue.value_buy
+    }
+
+    let dolarDiv = document.getElementById("dolarValues");
+    let vOf = document.createElement("td");
+    let cOf = document.createElement("td");
+    let vBl = document.createElement("td");
+    let cBl = document.createElement("td");
+    vOf.innerHTML = dolarValues.ventaOficial;
+    vOf.className = "text-success";
+    cOf.innerHTML = dolarValues.compraOficial;
+    cOf.className = "text-success";
+    vBl.innerHTML = dolarValues.ventaBlue;
+    vBl.className = "text-primary";
+    cBl.innerHTML = dolarValues.compraBlue;
+    cBl.className = "text-primary";
+
+    dolarDiv.append(vOf);
+    dolarDiv.append(cOf);
+    dolarDiv.append(vBl);
+    dolarDiv.append(cBl);
+});

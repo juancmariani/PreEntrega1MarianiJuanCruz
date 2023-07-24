@@ -15,6 +15,17 @@
         <h6>(O al menos intentarlo)</h6>
         <br>
     </div>
+    <div class="text-center text-info"><h6>¡A tener en cuenta! Valores del dólar a día de hoy:</h6></div> 
+        <table class="table text-center" id="dolarValues">
+            <thead>
+              <tr>
+                <th scope="col" class="text-success">Venta Oficial</th>
+                <th scope="col" class="text-success">Compra Oficial</th>
+                <th scope="col" class="text-primary">Venta Blue</th>
+                <th scope="col" class="text-primary">Compra Blue</th>
+              </tr>
+            </thead>
+        </table>
     <div class="container text-center">
         <form id="form">
                 <label for="tasaAnual" class="form-label">¿Cuál es la tasa anual de tu banco?</label>
@@ -26,36 +37,29 @@
                 <label for="inversion" class="form-label">¿Cuánto dinero estás dispuesto a invertir?</label>
                 <input type="text" class="form-control" id="inversion" placeholder="Bajo tu propio riesgo...">
                 <br>
-            <button type="submit" class="btn btn-warning">Simular plazo fijo</button>
+            <button id="simularPlazoFijoButton" class="btn btn-warning">Simular plazo fijo</button>
         </form>
         <br>
     <br>
     <div id="result" class="container-lg text-center"></div>
-    <div id="result2" class="container-lg text-center"></div>
     <br>
-    <p class="container-lg text-center" id="pResult"></p>
-    <div id="result3" class="container-lg text-center  text-success"></div>
-    <button class="btn btn-warning" id="historial" onclick="getHistorial()">Ver historial de consultas</button>
     </div>
-    <div class="container text-center" id="historicalTable">
-        <table class="table">
-            <thead>
+    <div class="container text-center"><button class="btn btn-warning" id="historial" onclick="getHistorial()">Ver historial de consultas</button></div>
+    <div class="container text-center" id="historicalTable" style="display:none">
+        <table class="table text-center" id="table">
+            <thead id="thead">
               <tr>
                 <th scope="col">#</th>
                 <th scope="col">Tasa Anual</th>
                 <th scope="col">Inflacion</th>
                 <th scope="col">Inversion</th>
-                <th scope="col">Resultado1</th>
-                <th scope="col">Resultado2</th>
               </tr>
             </thead>
             <tbody id="historicalBody">
-
             </tbody>
-          
+          </table>
     </div>
     <img src="https://png.pngtree.com/png-clipart/20221201/ourmid/pngtree-argentina-flag-with-watercolor-brush-for-world-cup-png-image_6490208.png" width="300" style="display: block; margin: 0 auto;" alt="Argentina">
     <script src="main.js"></script>
-    <script src="2.js"></script>
 </body>
 </html>
