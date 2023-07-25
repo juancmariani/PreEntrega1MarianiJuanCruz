@@ -41,11 +41,11 @@
         </form>
         <br>
     <br>
-    <div id="result" class="container-lg text-center"></div>
     <br>
     </div>
-    <div class="container text-center"><button class="btn btn-warning" id="historial" onclick="getHistorial()">Ver historial de consultas</button></div>
-    <div class="container text-center" id="historicalTable" style="display:none">
+    <div class="container text-center"></div>
+    <div class="container text-center" id="historicalTableDiv" style="display:none">
+        <h2>Historial de consultas</h2>
         <table class="table text-center" id="table">
             <thead id="thead">
               <tr>
@@ -59,7 +59,9 @@
             </tbody>
           </table>
     </div>
+    <div id="result" class="container-lg text-center"></div>
     <img src="https://png.pngtree.com/png-clipart/20221201/ourmid/pngtree-argentina-flag-with-watercolor-brush-for-world-cup-png-image_6490208.png" width="300" style="display: block; margin: 0 auto;" alt="Argentina">
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="main.js"></script>
 </body>
 </html>

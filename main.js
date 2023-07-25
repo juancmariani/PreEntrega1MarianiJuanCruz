@@ -1,5 +1,9 @@
 function calcularPlazo(values) {
-    let montAct = calcularMontoActual(values)
+    let resultDiv = document.getElementById("result");
+    let h2 = document.createElement("h2");
+    h2.innerHTML = "Recomendación";
+    resultDiv.append(h2);
+    let montAct = calcularMontoActual(values, resultDiv)
 
     if (values.inflacion > 20) {
         values.inflacion = values.inflacion / 100;
@@ -10,8 +14,6 @@ function calcularPlazo(values) {
     let resultadoAnual = values.inversion + values.tasaAnual * values.inversion;
     let difValor = montAct - valorInflacionado;
     let difValor2 = resultadoAnual - valorInflacionado;
-
-    let resultDiv = document.getElementById("result");
 
     let results = [{}];
     localStorage.setItem("results", results);
@@ -38,6 +40,7 @@ function calcularPlazo(values) {
         p2.className = "text-danger text-center";
     }
     resultDiv.append(p2);
+    swal(resultDiv);
 }
 
 function outputMessage(arr) {
@@ -55,7 +58,7 @@ function validarInputs(valor1, valor2, valor3) {
     return true;
 }
 
-function calcularMontoActual(inputValues) {
+function calcularMontoActual(inputValues, resultDiv) {
     if (inputValues.tasaAnual > 3) {
         inputValues.tasaAnual = inputValues.tasaAnual / 100;
     }
@@ -69,7 +72,6 @@ function calcularMontoActual(inputValues) {
         arrInfoMes.push({mes: mes, montoActual: (montoActual.toFixed(2))});
     }
     
-    let resultDiv = document.getElementById("result");
     let p = document.createElement("p");
 
     let infoMes = "Acumulación de monto mes a mes: <br>";
@@ -88,39 +90,55 @@ function simularValoresBtn(tasaAnual, inflacion, inversion) {
 
 function getHistorial() {
     if (JSON.parse(localStorage.getItem("inputValues")).items.length != 0) {
-        let x = document.getElementById("historicalTable");
-        x.style.display = "block";
-        }
-    document.getElementById("historicalBody").innerHTML = ""
-    let tbody = document.getElementById("historicalBody");
-    let savedValues = JSON.parse(localStorage.getItem("inputValues"));
-    document.getElementById("historial").innerHTML = "Actualizar historial";
-    let i = 0;
-    
-    savedValues.items.forEach(item => {
-        item = JSON.parse(item);
-        let row = document.createElement("tr");
-        let tdNumber = document.createElement("td");
-        let tdTasaAnual = document.createElement("td");
-        let tdInflacion = document.createElement("td");
-        let tdInversion = document.createElement("td");
-        let simularBtn = document.createElement("button");
-        simularBtn.className = "btn btn-warning";
-        simularBtn.setAttribute("onclick","simularValoresBtn("+ item.tasaAnual + ", " + item.inflacion + ", " + item.inversion + ");");
-        tdNumber.innerHTML = i+1;
-        tdTasaAnual.innerHTML = item.tasaAnual;
-        tdInflacion.innerHTML = item.inflacion;
-        tdInversion.innerHTML = item.inversion;
-        simularBtn.innerHTML = "Simular";
-        row.append(tdNumber);
-        row.append(tdTasaAnual);
-        row.append(tdInflacion);
-        row.append(tdInversion);
-        row.append(simularBtn);
-        tbody.append(row);
-        i++;
-    });
+        
+
+        document.getElementById("historicalBody").innerHTML = ""
+        let tbody = document.getElementById("historicalBody");
+        let savedValues = JSON.parse(localStorage.getItem("inputValues"));
+        
+        let i = 0;
+        
+        savedValues.items.forEach(item => {
+            item = JSON.parse(item);
+            let row = document.createElement("tr");
+            let tdNumber = document.createElement("td");
+            let tdTasaAnual = document.createElement("td");
+            let tdInflacion = document.createElement("td");
+            let tdInversion = document.createElement("td");
+            let simularBtn = document.createElement("button");
+            simularBtn.className = "btn btn-warning";
+            simularBtn.setAttribute("onclick","simularValoresBtn("+ item.tasaAnual + ", " + item.inflacion + ", " + item.inversion + ");");
+            tdNumber.innerHTML = i+1;
+            tdTasaAnual.innerHTML = item.tasaAnual;
+            tdInflacion.innerHTML = item.inflacion;
+            tdInversion.innerHTML = item.inversion;
+            simularBtn.innerHTML = "Simular";
+            row.append(tdNumber);
+            row.append(tdTasaAnual);
+            row.append(tdInflacion);
+            row.append(tdInversion);
+            row.append(simularBtn);
+            tbody.append(row);
+            i++;
+        });
+        document.getElementById("historicalTableDiv").style.display = "block";
+    }
 }
+
+// Al intentar levantar el archivo local apiConfig.json el navegador me lanza un CORS error
+/*
+const getJsonData = async () => {
+    try {
+        const data = await fetch("apiConfig.json");
+        const config = await respuesta.json();
+    } catch(error) {
+        console.log("error");
+    }
+}
+
+getJsonData();
+*/
+
 
 let inputValues = {items: []};
 localStorage.setItem("inputValues", JSON.stringify(inputValues));
@@ -144,6 +162,7 @@ simularPlazoFijoButton.addEventListener("click", function(event) {
         inputValues.items.push(JSON.stringify(values));
         localStorage.setItem("inputValues", JSON.stringify(inputValues));
         calcularPlazo(values);
+        getHistorial()
     }
 })
 
